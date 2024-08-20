@@ -31,11 +31,12 @@ namespace LiensFavoris.Repository.Links
                     Links AS l
                 ";
 
-            //Exécuter la requête SQL
+            //Exécuter la requête SQL, donc créer une commande
             MySqlCommand cmd = new MySqlCommand(sql, cnn);
             var reader = cmd.ExecuteReader();
             var maListe = new List<LinkModel>();
 
+            //Récupérer le retour et le transformer en objet
             while (reader.Read())
             {
                 var leLien = new LinkModel()
@@ -49,7 +50,6 @@ namespace LiensFavoris.Repository.Links
                 maListe.Add(leLien);
             }
 
-            //Récupérer le retour et le transformer en objet
 
             cnn.Close();
             return maListe;
