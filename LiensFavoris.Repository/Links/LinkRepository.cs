@@ -12,7 +12,11 @@ namespace LiensFavoris.Repository.Links
         public string ConnectionString { get; set; }
         public LinkRepository(IConfiguration configuration)
         {
-            ConnectionString = configuration.GetConnectionString("DefaultConnection");
+            var builder = new MySqlConnectionStringBuilder(
+                configuration.GetConnectionString("DefaultConnection"));
+            builder.UserID = configuration["DbUserId"];
+            builder.Password = configuration["DbPassword"];
+            ConnectionString = builder.ConnectionString + ";";
         }
         public List<LinkModel> GetAllLinks()
         {
