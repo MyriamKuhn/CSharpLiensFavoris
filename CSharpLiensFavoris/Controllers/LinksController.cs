@@ -2,6 +2,7 @@
 using LiensFavoris.Repository.Links;
 using LiensFavoris.Repository.User;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.ObjectPool;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -47,6 +48,7 @@ namespace CSharpLiensFavoris.Controllers
                 PerPage = perPage,
                 Recherche = search
             };
+
             return View(vm);
         }
 
@@ -83,6 +85,7 @@ namespace CSharpLiensFavoris.Controllers
             bool isOk = _linkRepository.EditLink(vm.monLien);
             if (isOk)
             {
+                TempData["MessageValidation"] = "Le lien a bien été modifié";
                 return RedirectToAction("Index");
             }
             else
@@ -98,6 +101,7 @@ namespace CSharpLiensFavoris.Controllers
             bool isOk = _linkRepository.DeleteLink(vm.monLien.IdLink);
             if (isOk)
             {
+                TempData["MessageValidation"] = "Le lien a bien été supprimé";
                 return RedirectToAction("Index");
             }
             else
