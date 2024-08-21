@@ -9,23 +9,16 @@ using System.Text;
 
 namespace LiensFavoris.Repository.User
 {
-    public class UserRepository : IUserRepository
+    public class UserRepository : BaseRepository, IUserRepository
     {
-        public string ConnectionString { get; set; }
-        public UserRepository(IConfiguration configuration)
+        public UserRepository(IConfiguration configuration) : base(configuration)
         {
-            var builder = new MySqlConnectionStringBuilder();
-            builder.Server = configuration["DbServer"];
-            builder.Database = configuration["DbDatabase"];
-            builder.UserID = configuration["DbUid"];
-            builder.Password = configuration["DbPassword"];
-            ConnectionString = builder.ConnectionString + ";";
+
         }
         public List<UserModel> GetAllUsers()
         {
             //Je me connecte à la BDD
-            MySqlConnection cnn = new MySqlConnection(ConnectionString);
-            cnn.Open();
+            var cnn = OpenConnexion();
 
             //Je crée une requête SQL
             string sql = @"

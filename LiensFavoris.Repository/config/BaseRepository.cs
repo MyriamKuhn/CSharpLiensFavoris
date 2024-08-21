@@ -14,7 +14,13 @@ namespace LiensFavoris.Repository.config
         public string ConnectionString { get; set; }
         public BaseRepository(IConfiguration configuration)
         {
-            ConnectionString = configuration.GetConnectionString("DefaultConnection");
+            var builder = new MySqlConnectionStringBuilder(
+                configuration.GetConnectionString("DefaultConnection"));
+                builder.Server = configuration["DbServer"];
+                builder.Database = configuration["DbDatabase"];
+                builder.UserID = configuration["DbUid"];
+                builder.Password = configuration["DbPassword"];
+            ConnectionString = builder.ConnectionString + ";";
         }
 
         public MySqlConnection OpenConnexion()

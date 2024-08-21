@@ -91,5 +91,21 @@ namespace CSharpLiensFavoris.Controllers
                 return View("EditLinkPage", vm);
             }
         }
+
+        [HttpPost]
+        public IActionResult DeleteLink(EditLinkViewModel vm)
+        {
+            bool isOk = _linkRepository.DeleteLink(vm.monLien.IdLink);
+            if (isOk)
+            {
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                vm.lstUsers = _userRepository.GetAllUsers();
+                vm.monLien = _linkRepository.GetLink(vm.monLien.IdLink);
+                return View("EditLinkPage", vm);
+            }
+        }
     }
 }

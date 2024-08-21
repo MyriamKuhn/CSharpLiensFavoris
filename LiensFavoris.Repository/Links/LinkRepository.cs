@@ -9,24 +9,17 @@ using System.Text;
 
 namespace LiensFavoris.Repository.Links
 {
-    public class LinkRepository : ILinkRepository
+    public class LinkRepository : BaseRepository, ILinkRepository
     {
-        public string ConnectionString { get; set; }
-        public LinkRepository(IConfiguration configuration)
+        public LinkRepository(IConfiguration configuration): base(configuration) 
         {
-            var builder = new MySqlConnectionStringBuilder();
-            builder.Server = configuration["DbServer"];
-            builder.Database = configuration["DbDatabase"];
-            builder.UserID = configuration["DbUid"];
-            builder.Password = configuration["DbPassword"];
-            ConnectionString = builder.ConnectionString + ";";
         }
+        
         public List<LinkModel> GetAllLinks()
         {
             //Je me connecte à la BDD
-            MySqlConnection cnn = new MySqlConnection(ConnectionString);
-            cnn.Open();
-
+            var cnn = OpenConnexion();
+            
             //Je crée une requête SQL
             string sql = @"
                 SELECT
@@ -76,8 +69,7 @@ namespace LiensFavoris.Repository.Links
         public LinkModel GetLink(int id)
         {
             //Je me connecte à la BDD
-            MySqlConnection cnn = new MySqlConnection(ConnectionString);
-            cnn.Open();
+            var cnn = OpenConnexion();
 
             //Je crée une requête SQL
             string sql = @"
@@ -128,10 +120,9 @@ namespace LiensFavoris.Repository.Links
         public bool EditLink(LinkModel link)
         {
             try
-            { 
+            {
                 //Je me connecte à la BDD
-                MySqlConnection cnn = new MySqlConnection(ConnectionString);
-                cnn.Open();
+                var cnn = OpenConnexion();
 
                 //Je crée une requête SQL
                 string sql = @"
@@ -161,6 +152,35 @@ namespace LiensFavoris.Repository.Links
             catch(Exception e)
             { 
                 return false; 
+            }
+        }
+
+        public bool DeleteLink(int id)
+        {
+            try
+            {
+                //Je me connecte à la BDD
+                var cnn = OpenConnexion();
+
+                //Je crée une requête SQL
+                string sql = @"
+                    DELETE FROM Links
+                    WHERE
+                        idLinks = @idLink
+                    ";
+
+                //Exécuter la requête SQL, donc créer une commande
+                MySqlCommand cmd = new MySqlCommand(sql, cnn);
+                cmd.Parameters.AddWithValue("@idLink", id);
+
+                var nbRowEdited = cmd.ExecuteNonQuery();
+
+                cnn.Close();
+                return true;
+            }
+            catch (Exception e)
+            {
+                return false;
             }
         }
 
