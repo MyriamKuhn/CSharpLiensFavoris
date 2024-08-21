@@ -1,25 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace LiensFavoris.Repository.User
 {
     public class UserModel
     {
-        public UserModel()
-        {
-
-        }
-        public UserModel(int idUser, string userForeName, string userSurName, string userEmail) 
-        {
-            IdUser = idUser;
-            UserForeName = userForeName;
-            UserSurName = userSurName;
-            UserEmail = userEmail;
-        }
+        [Display(Name = "Identifiant")]
         public int IdUser { get; set; }
+
+        [Display(Name = "Nom")]
         public string UserForeName { get; set; }
+
+        [Display(Name = "Prénom")]
         public string UserSurName { get; set; }
+
+        [Display(Name = "Email")]
         public string UserEmail { get; set; }
     }
 }
