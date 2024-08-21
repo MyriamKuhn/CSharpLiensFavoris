@@ -1,5 +1,6 @@
 ﻿using CSharpLiensFavoris.Models;
 using LiensFavoris.Repository.Links;
+using LiensFavoris.Repository.User;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,10 +10,12 @@ namespace CSharpLiensFavoris.Controllers
     public class LinksController : Controller
     {
         private readonly ILinkRepository _linkRepository;
+        private readonly IUserRepository _userRepository;
 
-        public LinksController(ILinkRepository linkRepository)
+        public LinksController(ILinkRepository linkRepository, IUserRepository userRepository)
         {
             _linkRepository = linkRepository;
+            _userRepository = userRepository;
         }
 
         public IActionResult Index(int perPage = 12, int nbPage = 1, string search = "")
@@ -61,9 +64,31 @@ namespace CSharpLiensFavoris.Controllers
                 //transformer le modèle de domaine en modèle de vue
                 EditLinkViewModel vm = new EditLinkViewModel()
                 {
-                    monLien = leLien
+                    monLien = leLien,
+                    lstUsers = _userRepository.GetAllUsers()
                 };
                 return View(vm);
+            }
+        }
+
+        [HttpPost]
+        public IActionResult EditLinkAction(EditLinkViewModel vm)
+        {
+            if (!ModelState.IsValid)
+            {
+                vm.lstUsers = _userRepository.GetAllUsers();
+                return View("EditLinkPage", vm);
+            }
+
+            bool isOk = _linkRepository.EditLink(vm.monLien);
+            if (isOk)
+            {
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                vm.lstUsers = _userRepository.GetAllUsers();
+                return View("EditLinkPage", vm);
             }
         }
     }

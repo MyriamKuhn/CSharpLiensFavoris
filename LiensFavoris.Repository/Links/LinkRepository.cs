@@ -124,5 +124,45 @@ namespace LiensFavoris.Repository.Links
             cnn.Close();
             return monLien;
         }
+
+        public bool EditLink(LinkModel link)
+        {
+            try
+            { 
+                //Je me connecte à la BDD
+                MySqlConnection cnn = new MySqlConnection(ConnectionString);
+                cnn.Open();
+
+                //Je crée une requête SQL
+                string sql = @"
+                    UPDATE Links
+                    SET
+                        title = @title,
+                        description = @description,
+                        link = @link,
+                        idAuteur = @idUser
+                    WHERE
+                        idLinks = @idLink
+                    ";
+
+                //Exécuter la requête SQL, donc créer une commande
+                MySqlCommand cmd = new MySqlCommand(sql, cnn);
+                cmd.Parameters.AddWithValue("@title", link.Title);
+                cmd.Parameters.AddWithValue("@description", link.Description);
+                cmd.Parameters.AddWithValue("@link", link.URL);
+                cmd.Parameters.AddWithValue("@idUser", link.Auteur.IdUser);
+                cmd.Parameters.AddWithValue("@idLink", link.IdLink);
+
+                var nbRowEdited = cmd.ExecuteNonQuery();
+                    
+                cnn.Close();
+                return true;
+            }
+            catch(Exception e)
+            { 
+                return false; 
+            }
+        }
+
     }
 }

@@ -1,5 +1,6 @@
 using LiensFavoris.Repository.config;
 using LiensFavoris.Repository.Links;
+using LiensFavoris.Repository.User;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -27,6 +28,7 @@ namespace CSharpLiensFavoris
         {
             services.AddTransient<IBaseRepository, BaseRepository>();
             services.AddTransient<ILinkRepository, LinkRepository>();
+            services.AddTransient<IUserRepository, UserRepository>();
 
             services.AddControllersWithViews();
         }

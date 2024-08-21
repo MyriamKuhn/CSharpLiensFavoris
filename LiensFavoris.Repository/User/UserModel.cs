@@ -6,6 +6,10 @@ namespace LiensFavoris.Repository.User
 {
     public class UserModel
     {
+        public UserModel()
+        {
+
+        }
         public UserModel(int idUser, string userForeName, string userSurName, string userEmail) 
         {
             IdUser = idUser;
@@ -13,7 +17,7 @@ namespace LiensFavoris.Repository.User
             UserSurName = userSurName;
             UserEmail = userEmail;
         }
-        public int IdUser { get; }
+        public int IdUser { get; set; }
         public string UserForeName { get; set; }
         public string UserSurName { get; set; }
         public string UserEmail { get; set; }

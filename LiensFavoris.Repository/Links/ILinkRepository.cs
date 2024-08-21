@@ -8,5 +8,6 @@ namespace LiensFavoris.Repository.Links
     {
         public List<LinkModel> GetAllLinks();
         public LinkModel GetLink(int id);
+        public bool EditLink(LinkModel link);
     }
 }
